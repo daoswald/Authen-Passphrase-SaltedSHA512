@@ -1,3 +1,4 @@
+## no critic (RCS,VERSION)
 package Authen::Passphrase::SaltedSHA512;
 
 use 5.006;
@@ -5,16 +6,16 @@ use strict;
 use warnings;
 
 our $VERSION = '0.01_001';
-$VERSION = eval $VERSION;
+$VERSION = eval $VERSION;    ## no critic (eval)
 
 use Exporter;
 use Authen::Passphrase::SaltedDigest;
 use Math::Random::Secure qw( irand );
 
-our @ISA = qw( Exporter Authen::Passphrase::SaltedDigest );
-our @EXPORT = qw();
+our @ISA = qw( Exporter Authen::Passphrase::SaltedDigest );   ## no critic (ISA)
 our @EXPORT_OK = qw( generate_salted_sha512 validate_salted_sha512 );
 
+use constant NUM_LONGS => 16;    ## no critic (constant)
 
 sub new {
     my ( $class, %args ) = @_;
@@ -27,18 +28,21 @@ sub new {
 
     # If there is no hash supplied, and a passphrase is supplied, this must be
     # a passphrase hash/salt generation object.
-    if (
-            ! exists $args{hash}
-        and ! exists $args{hash_hex}
-        and   exists $args{passphrase}
-    ) {
+    if (   !exists $args{hash}
+        && !exists $args{hash_hex}
+        && exists $args{passphrase} )
+    {
 
         # Generate a 512 bit random salt using a secure random generator.
         # 8 hex characters (4 bits each) * 16 == 512 bits.
         # ie, 16 longs of 32 bits each is 512 bits, or 128 hex characters.
-        my $salt =
-          join( '', map { unpack( 'H8', pack( 'l', irand() ) ) } 1 .. 16 );
+        my $salt = q{};
+        foreach ( 1 .. NUM_LONGS ) {
+            my $rand_long = pack 'l', irand();
+            $salt .= unpack 'H8', $rand_long;
+        }
         for (qw( salt salt_hash )) {
+
             # We're generating our own salt.  Don't accept others.
             if ( exists $args{$_} ) {
                 delete $args{$_};
@@ -49,27 +53,24 @@ sub new {
     return bless $class->SUPER::new(%args), $class;
 }
 
-
-
-
 sub generate_salted_sha512 {
     my $password = shift;
-    my $gen = __PACKAGE__->new( $password );
+    my $gen      = __PACKAGE__->new($password);
     return ( $gen->salt_hex, $gen->hash_hex );
 }
 
-
-
 sub validate_salted_sha512 {
-    my( $password, $salt_hex, $hash_hex ) = @_;
+    my ( $password, $salt_hex, $hash_hex ) = @_;
     my $auth = __PACKAGE__->new(
-        salt_hex    => $salt_hex,
-        hash_hex    => $hash_hex
+        salt_hex => $salt_hex,
+        hash_hex => $hash_hex
     );
-    return $auth->match( $password );
+    return $auth->match($password);
 }
 
-1; # End of Authen::Passphrase::SaltedSHA512
+1;    # End of Authen::Passphrase::SaltedSHA512
+
+__END__
 
 =head1 NAME
 
@@ -181,14 +182,16 @@ subroutines are available:
 
 
 
-=head1 METHODS
+=head1 SUBROUTINES/METHODS
 
-The B<METHODS> section describes the methods used in this module's Object
-Oriented interface.
+=head2 METHODS
 
-=head2 new
+The following section describes the methods available through the module's
+Object Oriented interface.
 
-The constructor will create an object that can either be used to generate
+=head3 new
+
+B<The constructor> will create an object that can either be used to generate
 a salt and a hash for later use, or to challenge a supplied salt and hash
 by a passphrase supplied to C<match>.
 
@@ -240,29 +243,29 @@ long, or 128 hex digits.
 If a C<passphrase> is suppled, a generator object will be created.  If some
 form of C<salt> and C<hash> are supplied, a challenge object will be created.
 
-=head2 salt
+=head3 salt
 
 Returns the 512 bit salt, in raw form (64 bytes).
 
     my $salt = $auth_gen->salt;
 
-=head2 salt_hex
+=head3 salt_hex
 
 Returns the salt, as a string of 128 hexidecimal digits.
 
     my $salt_hash = $auth_gen->salt_hash;
     
-=head2 hash
+=head3 hash
 
 Returns the 512 bit hash, in raw form.
 
     my $hash = $auth_gen->hash;
 
-=head2 hash_hex
+=head3 hash_hex
 
 Returns the hash, as a string of 128 hexidecimal digits.
 
-=head2 match
+=head3 match
 
 Returns true if C<$passphrase> matches against the salt and hash supplied to
 the constructor, and false otherwise.
@@ -276,24 +279,24 @@ the constructor, and false otherwise.
               "Happy hunting!\n";
     }
 
-=head2 algorithm
+=head3 algorithm
 
 Returns the digest algorithm, which will always be C<SHA-512>.
 
 
-=head1 SUBROUTINES
+=head2 SUBROUTINES
 
-The B<SUBROUTINES> section describes the subroutines used in this module's
+This section describes the subroutines used in this module's
 standard (non-OO) interface.
 
-=head2 generate_salted_sha512
+=head3 generate_salted_sha512
 
 Accepts a C<$passphrase> parameter, and returns a list containing a hex
 representation of a random salt, and of the hash.
 
     my( $salt_hex, $hash_hex ) = generate_salted_sha512( 'Groovy Password' );
 
-=head2 validate_salted_sha512
+=head3 validate_salted_sha512
 
 Accepts parameters of C<$passphrase>, C<$salt_hex>, and C<$hash_hex>, and
 returns true if C<$passphrase> authenticates against the given salt and hash.
@@ -331,14 +334,14 @@ the C<<algorithm => 'SHA-512'>> setting:
 
 So if you want a drop-in replacement for Authen::Passphrase::SaltedDigest that
 defaults to SHA-512 hashing with automatic generation of salts composed of
-512 securely-random bits, the changes to your code will be simple. 
+512 securely-random bits, the changes to your code will be simple.
 
-That said, the C<as_rfc2307> method of Authen::Passphrase::SaltedDigest
-doesn't allow for hard coded defaults, and thus, is meaningless in the context
-of this module.  Furthermore, this module doesn't consider the
-C<algorithm> and C<random_salt> directives in its constructor; it already sets
-a SHA-512 default and always generates a 512-bit random salt.
+However, the C<as_rfc2307> method from Authen::Passphrase::SaltedDigest
+shouldn't and can't be used within Authen::Passphrase::SaltedSHA512.  See
+the B<INCOMPATIBILITIES> section below for details.
 
+This module should install and run on any system that supports Perl from
+v5.6.0 to the present.
 
 =head1 IMPLEMENTATION DETAILS
 
@@ -358,6 +361,42 @@ to be reasonable choices, Math::Random::Secure seemed to offer a solution that
 is secure today, and should continue to follow I<Best Practices> as new trends
 emerge.
 
+=head1 INCOMPATIBILITIES
+
+The C<as_rfc2307> method of Authen::Passphrase::SaltedDigest
+doesn't allow for hard coded defaults, and thus, is meaningless in the context
+of this module.  Furthermore, this module doesn't consider the
+C<algorithm> and C<random_salt> directives in its constructor; it already sets
+a SHA-512 default and always generates a 512-bit random salt.
+
+=head1 DEPENDENCIES
+
+Strong security doesn't come cheap.  This module has the following non-core
+dependencies:
+
+Authen::Passphrase (which provides Authen::Passphrase::SaltedDigest)
+Math::Random::Secure
+
+Each of these has its own list of non-core dependencies as well.  But it's a
+well-tested set of dependencies, with broad portability demonstrated by the
+smoke tests.
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+This module should be installable on most platforms via the traditional CPAN
+installers, or by unpacking the tarball and repeating the well-known mantra:
+
+    make
+    make test
+    make install
+
+
+=head1 DIAGNOSTICS
+
+As this module subclasses Authen::Passphrase::SaltedDigest, all of the
+warnings and diagnostic messages produced by that module will be present in
+this module.
+
 =head1 SEE ALSO
 
 =over 4
@@ -376,7 +415,7 @@ emerge.
 
 David Oswald, C<< <davido at cpan.org> >>
 
-=head1 BUGS
+=head1 BUGS AND LIMITATIONS
 
 Please report any bugs or feature requests to
 C<bug-authen-passphrase-saltedsha512 at rt.cpan.org>, or through the web
@@ -384,7 +423,11 @@ interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Authen-Passphrase-
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
-
+Password protection and authentication is an arms race of sorts.  For now,
+SHA-512 hasn't been broken, and for now, the random number generator used
+to generate random salt is considered cryptographically sound.  However,
+this module is only one element in what necessarily must be a system-wide
+approach to robust security.
 
 
 =head1 SUPPORT
@@ -429,6 +472,5 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
-
 
 =cut

@@ -1,4 +1,4 @@
-#!perl -T
+#!/usr/bin/env perl
 
 use 5.006;
 use strict;
@@ -7,10 +7,12 @@ use Test::More tests => 3;
 
 sub not_in_file_ok {
     my ($filename, %regex) = @_;
-    open( my $fh, '<', $filename )
-        or die "couldn't open $filename for reading: $!";
 
     my %violated;
+
+    ## no critic (RequireBriefOpen)
+    open  my $fh, '<', $filename
+        or die "couldn't open $filename for reading: $!";
 
     while (my $line = <$fh>) {
         while (my ($desc, $regex) = each %regex) {
@@ -19,6 +21,7 @@ sub not_in_file_ok {
             }
         }
     }
+    close $fh;
 
     if (%violated) {
         fail("$filename contains boilerplate text");
@@ -26,6 +29,7 @@ sub not_in_file_ok {
     } else {
         pass("$filename contains no boilerplate text");
     }
+    return;
 }
 
 sub module_boilerplate_ok {
@@ -35,22 +39,16 @@ sub module_boilerplate_ok {
         'boilerplate description'     => qr/Quick summary of what the module/,
         'stub function definition'    => qr/function[12]/,
     );
+    return;
 }
 
-TODO: {
-  local $TODO = "Need to replace the boilerplate text";
+not_in_file_ok(README =>
+"The README is used..."       => qr/The README is used/,
+"'version information here'"  => qr/to provide version information/,
+);
 
-  not_in_file_ok(README =>
-    "The README is used..."       => qr/The README is used/,
-    "'version information here'"  => qr/to provide version information/,
-  );
+not_in_file_ok(Changes =>
+"placeholder date/time"       => qr(Date/time)
+);
 
-  not_in_file_ok(Changes =>
-    "placeholder date/time"       => qr(Date/time)
-  );
-
-  module_boilerplate_ok('lib/Authen/Passphrase/SaltedSHA512.pm');
-
-
-}
-
+module_boilerplate_ok('lib/Authen/Passphrase/SaltedSHA512.pm');
