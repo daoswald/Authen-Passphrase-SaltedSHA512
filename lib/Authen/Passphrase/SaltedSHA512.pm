@@ -4,12 +4,17 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.01_001';
+$VERSION = eval $VERSION;
 
+use Exporter;
 use Authen::Passphrase::SaltedDigest;
 use Math::Random::Secure qw( irand );
 
-our @ISA = qw( Authen::Passphrase::SaltedDigest );
+our @ISA = qw( Exporter Authen::Passphrase::SaltedDigest );
+our @EXPORT = qw();
+our @EXPORT_OK = qw( generate_salted_sha512 validate_salted_sha512 );
+
 
 sub new {
     my ( $class, %args ) = @_;
@@ -45,6 +50,24 @@ sub new {
 }
 
 
+
+
+sub generate_salted_sha512 {
+    my $password = shift;
+    my $gen = __PACKAGE__->new( $password );
+    return ( $gen->salt_hex, $gen->hash_hex );
+}
+
+
+
+sub validate_salted_sha512 {
+    my( $password, $salt_hex, $hash_hex ) = @_;
+    my $auth = __PACKAGE__->new(
+        salt_hex    => $salt_hex,
+        hash_hex    => $hash_hex
+    );
+    return $auth->match( $password );
+}
 
 1; # End of Authen::Passphrase::SaltedSHA512
 
@@ -90,6 +113,15 @@ Some examples:
         print "You are a winner!\n";
     }
 
+    # Or for the ultimate in ease and simplicity:
+    use Authen::Passphrase::SaltedSHA512 qw(
+        generate_salted_sha512      validate_salted_sha512
+    );
+    my ( $salt_hex, $hash_hex ) = generate_salted_sha512( $passphrase );
+    my $is_valid = validate_salted_sha512( $passphrase, $salt_hex, $hash_hex );
+
+
+
 =head1 DESCRIPTION
 
 Authen::Passhprase::SaltedSHA512 is designed to simplify the process of
@@ -97,6 +129,10 @@ generating random salt for, and a salted hash of a user supplied passphrase.
 
 It is also designed to easily authenticate a user supplied passphrase against
 a given salt and hash.
+
+The presumed use-case is for user authentication where a salt and a password
+hash will be stored in a user database.  The simple interface should fit
+into a broad range of authentication systems with minimal clutter.
 
 Authen::Passphrase::SaltedSHA512 is a subclass of
 Authen::Passphrase::SaltedDigest that overrides the constructor to provide
@@ -132,10 +168,23 @@ an authentication scheme, and a simpler user interface results.
 
 =head1 EXPORT
 
-Nothing is exported. This is module uses an object oriented interface as
-described below:
+Nothing is exported by default.  By supplying an export list, the following
+subroutines are available:
 
-=head1 SUBROUTINES/METHODS
+=over 4
+
+=item * generate_salted_sha512
+
+=item * validate_salted_sha512
+
+=back
+
+
+
+=head1 METHODS
+
+The B<METHODS> section describes the methods used in this module's Object
+Oriented interface.
 
 =head2 new
 
@@ -232,6 +281,30 @@ the constructor, and false otherwise.
 Returns the digest algorithm, which will always be C<SHA-512>.
 
 
+=head1 SUBROUTINES
+
+The B<SUBROUTINES> section describes the subroutines used in this module's
+standard (non-OO) interface.
+
+=head2 generate_salted_sha512
+
+Accepts a C<$passphrase> parameter, and returns a list containing a hex
+representation of a random salt, and of the hash.
+
+    my( $salt_hex, $hash_hex ) = generate_salted_sha512( 'Groovy Password' );
+
+=head2 validate_salted_sha512
+
+Accepts parameters of C<$passphrase>, C<$salt_hex>, and C<$hash_hex>, and
+returns true if C<$passphrase> authenticates against the given salt and hash.
+
+    my $is_valid = validate_salted_sha512(
+        'Groovy Password',
+        $salt_hex,
+        $hash_hex
+    );
+
+
 =head1 COMPATIBILITY
 
 Because Authen::Passphrase::SaltedSHA512 is a subclass of
@@ -263,7 +336,8 @@ defaults to SHA-512 hashing with automatic generation of salts composed of
 That said, the C<as_rfc2307> method of Authen::Passphrase::SaltedDigest
 doesn't allow for hard coded defaults, and thus, is meaningless in the context
 of this module.  Furthermore, this module doesn't consider the
-C<algorithm> directive in its constructor; it already sets a default.
+C<algorithm> and C<random_salt> directives in its constructor; it already sets
+a SHA-512 default and always generates a 512-bit random salt.
 
 
 =head1 IMPLEMENTATION DETAILS
@@ -286,6 +360,8 @@ emerge.
 
 =head1 SEE ALSO
 
+=over 4
+
 =item * Authen::Passphrase
 
 =item * Authen::Passphrase::SaltedDigest
@@ -294,7 +370,7 @@ emerge.
 
 =item * L<Wikipedia article on SHA-2 (SHA-512)|http://en.wikipedia.org/wiki/SHA-2>
 
-
+=back
 
 =head1 AUTHOR
 
