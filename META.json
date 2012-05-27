@@ -1,7 +1,7 @@
 {
    "abstract" : "Safe, Sane, and Simple passphrase generation",
    "author" : [
-      "David Oswald < davido [@at] cpan [.dot] org >"
+      "David Oswald < davido [@at] cpan [d.o.t] org >"
    ],
    "dynamic_config" : 1,
    "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150",
@@ -22,22 +22,22 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "Test::More" : "0.98"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "6.62"
          }
       },
       "runtime" : {
          "requires" : {
             "Authen::Passphrase" : 0,
             "Math::Random::Secure" : 0,
-            "Test::More" : 0
+            "perl" : "5.006000"
          }
       }
    },
-   "release_status" : "testing",
-   "version" : "0.01_001"
+   "release_status" : "stable",
+   "version" : "0.01"
 }

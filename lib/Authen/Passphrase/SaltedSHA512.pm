@@ -5,8 +5,8 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '0.01_001';
-$VERSION = eval $VERSION;    ## no critic (eval)
+our $VERSION = '0.01';
+# $VERSION = eval $VERSION;    ## no critic (eval)
 
 use Exporter;
 use Authen::Passphrase::SaltedDigest;
@@ -55,7 +55,7 @@ sub new {
 
 sub generate_salted_sha512 {
     my $password = shift;
-    my $gen      = __PACKAGE__->new($password);
+    my $gen      = __PACKAGE__->new( passphrase => $password);
     return ( $gen->salt_hex, $gen->hash_hex );
 }
 

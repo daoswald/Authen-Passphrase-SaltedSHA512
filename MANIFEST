@@ -11,5 +11,7 @@ t/04-perlcritic.t
 t/05-kwalitee.t
 t/10-prereqs.t
 t/11-load.t
+t/12-subroutines.t
+t/13-oomethods.t
 META.yml
 META.json

@@ -1,12 +1,13 @@
-#!/usr/bin/env perl
-
+## no critic (RCS,VERSION,encapsulation,Module)
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More;
 
 BEGIN {
-    use_ok( 'Authen::Passphrase::SaltedSHA512' ) || print "Bail out!\n";
+    use_ok('Authen::Passphrase');
+    use_ok('Authen::Passphrase::SaltedDigest');
+    use_ok('Math::Random::Secure');
 }
 
-diag( "Testing Authen::Passphrase::SaltedSHA512 $Authen::Passphrase::SaltedSHA512::VERSION, Perl $], $^X" );
+done_testing();
