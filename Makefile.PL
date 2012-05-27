@@ -1,5 +1,4 @@
 ## no critic (RCS,VERSION,interpolation)
-use 5.006;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -24,7 +23,7 @@ WriteMakefile(
     },
     META_MERGE  => {
         provides    => 'Authen::Passphrase::SaltedSHA512.pm',
-        version     => '0.01',
+        version     => '0.02',
     },
     dist => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Authen-Passphrase-SaltedSHA512-*' },
