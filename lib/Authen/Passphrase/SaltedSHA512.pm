@@ -210,6 +210,14 @@ Instantiate a challenge object.
         hash_hex    => $retrieved_hash
     );
 
+
+=head4 Constructor Parameters
+
+For passphrase hash and salt generation, you must supply the C<passphrase>
+parameter.  For validation, you must supply either a raw or a hex salt, using
+the C<salt> or C<salt_hex> parameters, and either a raw or a hex hash, using
+the C<hash> or C<hash_hex> parameters.  These are described below.
+
 =over
 
 =item B<salt>
@@ -266,6 +274,8 @@ Returns the 512 bit hash, in raw form.
 =head3 hash_hex
 
 Returns the hash, as a string of 128 hexidecimal digits.
+
+    my $hash_hex = $auth_gen->hash;
 
 =head3 match
 
@@ -446,6 +456,10 @@ You can also look for information at:
 
 =over 4
 
+=item * This module's GitHub repository
+
+L<http://github.com/daoswald/Authen-Passphrase-SaltedSHA512>
+
 =item * RT: CPAN's request tracker (report bugs here)
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Authen-Passphrase-SaltedSHA512>
@@ -467,7 +481,8 @@ L<http://search.cpan.org/dist/Authen-Passphrase-SaltedSHA512/>
 
 =head1 ACKNOWLEDGEMENTS
 
-Thanks go to the following individuals for providing input and suggestions:
+Thanks go to the following individuals for providing input, suggestions, or
+code:
 
 =over 4
 
