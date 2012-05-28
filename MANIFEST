@@ -13,5 +13,7 @@ t/10-prereqs.t
 t/11-load.t
 t/12-subroutines.t
 t/13-oomethods.t
+examples/simple.pl
+examples/oo_interface.pl
 META.yml
 META.json

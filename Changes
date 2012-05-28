@@ -1,9 +1,10 @@
 Revision history for Authen-Passphrase-SaltedSHA512
 
-0.02    ???????????????????????????????
-    - POD fixes.
+0.02    01:21 PDT Monday May 28, 2012
+    - Many POD fixes, improvements.
     - POD Acknowledements section added.
-
+    - Additional metadata added to Makefile.PL.
+    - ./examples directory added with several example scripts.
 
 0.01    21:57 PDT Saturday May 26, 2012
     - Initial version.  Subclasses Authen::Passphrase::SaltedDigest.

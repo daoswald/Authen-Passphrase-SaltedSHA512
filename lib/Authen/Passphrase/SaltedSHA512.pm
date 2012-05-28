@@ -83,11 +83,13 @@ Version 0.02
 
 =head1 SYNOPSIS
 
-This module is a subclass of Authen::Passphrase::SaltedDigest.  It adds two
-features to make your life a little easier and safer.  First, it simplifies
-the user interface by selecting reasonable (and secure) defaults.  Second,
-in generating salt, it uses the high quality, secure random number generator
-provided by Math::Random::Secure.
+This module is a subclass of
+L<Authen::Passphrase::SaltedDigest|http://search.cpan.org/perldoc?Authen::Passphrase::SaltedDigest>.
+It adds two features to make your life a little easier and safer.  First, it
+simplifies the user interface by selecting reasonable (and secure) defaults.
+Second, in generating salt, it uses the high quality, secure random number
+generator provided by
+L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>.
 
 Some examples:
 
@@ -136,16 +138,18 @@ hash will be stored in a user database.  The simple interface should fit
 into a broad range of authentication systems with minimal clutter.
 
 Authen::Passphrase::SaltedSHA512 is a subclass of
-Authen::Passphrase::SaltedDigest that overrides the constructor to provide
-reasonable defaults so that you don't have to spend a week reading articles
-on which algorithm to use, and how to generate a good salt.
+L<Authen::Passphrase::SaltedDigest|http://search.cpan.org/perldoc?Authen::Passphrase::SaltedDigest>
+that overrides the constructor to provide reasonable defaults so that you
+don't have to spend a week reading articles on which algorithm to use, and how
+to generate a good salt.
 
 The hashing algorithm chosen is the SHA-512 hash function from the SHA-2
 family.  Currently SHA-512 is a leading edge standard in strong cryptography.
 
 The salt generated when creating authentication credentials is a 512 bit
 random string.  The random number generating algorithm used comes from
-Math::Random::Secure.  That module currently uses Math::Random::ISAAC, "I<...a
+L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>.
+That module currently uses Math::Random::ISAAC, "I<...a
 cryptographically-strong random number generator with no known serious
 weaknesses.>"  Math::Random::Secure generates its seed using
 Crypt::Random::Source.  The reason that Math::Random::Secure was chosen over
@@ -331,20 +335,22 @@ distribution and is good for modelling purposes but do not use it for
 cryptography."
 
 Authen::Passphrase::SaltedDigest can generate random salt, and relies on
-Data::Entropy to do so.  But Data::Entropy::Algorithm, which by default seems
-to be constrained by the quality of Perl's C<seed>.
+Data::Entropy to do so.  But Data::Entropy::Algorithm, by default seems to be
+constrained by the quality of Perl's C<seed>.
 
 The list of other possibilities is long, and while many of them might turn out
-to be reasonable choices, Math::Random::Secure seemed to offer a solution that
-is secure today, and should continue to follow I<Best Practices> as new trends
-emerge.
+to be reasonable choices,
+L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>
+seemed to offer a solution that is secure today, and should continue to follow
+I<Best Practices> as new trends emerge.
 
 =head1 COMPATIBILITY
 
 Because Authen::Passphrase::SaltedSHA512 is a subclass of
-Authen::Passphrase::SaltedDigest, the hash and salt generated can also be
-challenged using Authen::Passphrase::SaltedDigest in place of this module
-simply by supplying the appropriate defaults to the constructor:
+L<Authen::Passphrase::SaltedDigest|http://search.cpan.org/perldoc?Authen::Passphrase::SaltedDigest>,
+the hash and salt generated can also be challenged using
+Authen::Passphrase::SaltedDigest in place of this module simply by supplying
+the appropriate defaults to the constructor:
 
     my $apsd = Authen::Passphrase::SaltedDigest->new(
         algorithm   => 'SHA-512',
@@ -389,8 +395,12 @@ a SHA-512 default and always generates a 512-bit random salt.
 Strong security doesn't come cheap.  This module has the following non-core
 dependencies:
 
+
 Authen::Passphrase (which provides Authen::Passphrase::SaltedDigest)
-Math::Random::Secure
+
+
+L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>
+
 
 Each of these has its own list of non-core dependencies as well.  But it's a
 well-tested set of dependencies, with broad portability demonstrated by the
@@ -416,11 +426,14 @@ this module.
 
 =over 4
 
-=item * Authen::Passphrase
+=item * Additional examples are provided in the C<examples/> folder within
+the module's build directory.
 
-=item * Authen::Passphrase::SaltedDigest
+=item * L<Authen::Passphrase|http://search.cpan.org/perldoc?Authen::Passphrase>
 
-=item * Math::Random::Secure
+=item * L<Authen::Passphrase::SaltedDigest|http://search.cpan.org/perldoc?Authen::Passphrase::SaltedDigest>
+
+=item * L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>
 
 =item * L<Wikipedia article on SHA-2 (SHA-512)|http://en.wikipedia.org/wiki/SHA-2>
 
