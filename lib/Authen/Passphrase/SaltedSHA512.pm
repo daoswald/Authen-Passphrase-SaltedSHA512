@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 our $VERSION = '0.03';
+
 # $VERSION = eval $VERSION;    ## no critic (eval)
 
 use Exporter;
@@ -50,13 +51,14 @@ sub new {
         }
         $args{salt_hex} = $salt;
     }
+
     # Let the super-class instantiate and handle our preprocessed args.
     return $class->SUPER::new(%args);
 }
 
 sub generate_salted_sha512 {
     my $password = shift;
-    my $gen      = __PACKAGE__->new( passphrase => $password);
+    my $gen = __PACKAGE__->new( passphrase => $password );
     return ( $gen->salt_hex, $gen->hash_hex );
 }
 
