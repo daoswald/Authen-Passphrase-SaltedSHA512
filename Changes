@@ -1,5 +1,8 @@
 Revision history for Authen-Passphrase-SaltedSHA512
 
+0.03    09:10 PDT Thursday May 31, 2012
+    - Improved instantiation of SUPER-class.
+
 0.02    01:21 PDT Monday May 28, 2012
     - Many POD fixes, improvements.
     - POD Acknowledements section added.

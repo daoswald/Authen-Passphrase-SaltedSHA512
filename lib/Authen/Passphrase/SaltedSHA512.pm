@@ -5,7 +5,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 # $VERSION = eval $VERSION;    ## no critic (eval)
 
 use Exporter;
@@ -50,7 +50,8 @@ sub new {
         }
         $args{salt_hex} = $salt;
     }
-    return bless $class->SUPER::new(%args), $class;
+    # Let the super-class instantiate and handle our preprocessed args.
+    return $class->SUPER::new(%args);
 }
 
 sub generate_salted_sha512 {
@@ -79,7 +80,7 @@ and authentication.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 SYNOPSIS
 
@@ -389,6 +390,14 @@ doesn't allow for hard coded defaults, and thus, is meaningless in the context
 of this module.  Furthermore, this module doesn't consider the
 C<algorithm> and C<random_salt> directives in its constructor; it already sets
 a SHA-512 default and always generates a 512-bit random salt.
+
+One of the module's dependencies that inherited through Authen::Passphrase
+may fail to pass its test suite on some Windows systems.  The part that fails
+relates to the random number generator used by Authen::Passphrase.  This
+module uses a different random number generator -- not the one from
+Authen::Passphrase.  You may decide that if a failure to install traces back
+to a random number generation module for Authen::Passphrase a forced install
+could still be appropriate.
 
 =head1 DEPENDENCIES
 
