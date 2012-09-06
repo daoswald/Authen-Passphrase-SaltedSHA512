@@ -1,5 +1,11 @@
 Revision history for Authen-Passphrase-SaltedSHA512
 
+0.04    01:22 PDT Thursday Sep 06, 2012
+    - Added Statistics::Test::RandomWalk to BUILD_REQUIRES
+      because Math::Random::Secure fails to list it as a 
+      dependency for its test suite.  If that bug gets fixed,
+      we can remove it from our Makefile.PL.
+      See Math::Random::Secure RT#74541.
 0.03    09:10 PDT Thursday May 31, 2012
     - Improved instantiation of SUPER-class.
 
