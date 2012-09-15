@@ -1,5 +1,9 @@
 Revision history for Authen-Passphrase-SaltedSHA512
-
+0.05    00:08 PDT Saturday Sep 15, 2012
+    - Switched random number back-end to Bytes::Random::Secure (which
+      essentially uses the same dependencies anyway, but abstracts away the
+      details, and could switch easily to another generator in the future).
+    - Explanation in the POD as to why dependencies are heavy.
 0.04    01:22 PDT Thursday Sep 06, 2012
     - Added Statistics::Test::RandomWalk to BUILD_REQUIRES
       because Math::Random::Secure fails to list it as a 

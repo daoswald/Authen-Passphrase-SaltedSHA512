@@ -1,22 +1,22 @@
 ## no critic (RCS,VERSION)
 package Authen::Passphrase::SaltedSHA512;
 
-use 5.006;
+use 5.008;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 # $VERSION = eval $VERSION;    ## no critic (eval)
 
 use Exporter;
 use Authen::Passphrase::SaltedDigest;
-use Math::Random::Secure qw( irand );
+use Bytes::Random::Secure qw( random_bytes_hex );
 
 our @ISA = qw( Exporter Authen::Passphrase::SaltedDigest );   ## no critic (ISA)
 our @EXPORT_OK = qw( generate_salted_sha512 validate_salted_sha512 );
 
-use constant NUM_LONGS => 16;    ## no critic (constant)
+use constant NUM_BYTES => 64;    ## no critic (constant)
 
 sub new {
     my ( $class, %args ) = @_;
@@ -35,13 +35,9 @@ sub new {
     {
 
         # Generate a 512 bit random salt using a secure random generator.
-        # 8 hex characters (4 bits each) * 16 == 512 bits.
-        # ie, 16 longs of 32 bits each is 512 bits, or 128 hex characters.
-        my $salt = q{};
-        foreach ( 1 .. NUM_LONGS ) {
-            my $rand_long = pack 'l', irand();
-            $salt .= unpack 'H8', $rand_long;
-        }
+        # 64 bytes is 512 bits, or 128 hex characters.
+        my $salt = random_bytes_hex(NUM_BYTES);
+        
         for (qw( salt salt_hash )) {
 
             # We're generating our own salt.  Don't accept others.
@@ -82,7 +78,7 @@ and authentication.
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =head1 SYNOPSIS
 
@@ -337,15 +333,18 @@ the POD for Math::Random::MT states, "This algorithm has a very uniform
 distribution and is good for modelling purposes but do not use it for
 cryptography."
 
-Authen::Passphrase::SaltedDigest can generate random salt, and relies on
-Data::Entropy to do so.  But Data::Entropy::Algorithm, by default seems to be
-constrained by the quality of Perl's C<seed>.
+Authen::Passphrase::SaltedDigest could generate random salt, but relies on
+Data::Entropy to do so.  Data::Entropy::Algorithm, by default seems to be
+constrained by the quality of Perl's C<seed>, which is probably not as secure
+of a source as should be used.  That leads to a search for a better solution.
 
 The list of other possibilities is long, and while many of them might turn out
 to be reasonable choices,
 L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>
 seemed to offer a solution that is secure today, and should continue to follow
-I<Best Practices> as new trends emerge.
+I<Best Practices> as new trends emerge.  The disadvantage is that it is heavy
+on dependencies.  This seems to be the price one has to pay for a really good
+random source.
 
 =head1 COMPATIBILITY
 
@@ -381,7 +380,7 @@ shouldn't and can't be used within Authen::Passphrase::SaltedSHA512.  See
 the B<INCOMPATIBILITIES> section below for details.
 
 This module should install and run on any system that supports Perl from
-v5.6.0 to the present, and fits easily into authentication plugins such as
+v5.8.0 to the present, and fits easily into authentication plugins such as
 Mojolicious::Plugin::Authentication.
 
 
@@ -410,12 +409,15 @@ dependencies:
 Authen::Passphrase (which provides Authen::Passphrase::SaltedDigest)
 
 
+L<Bytes::Random::Secure|http://search.cpan.org/perldoc?Bytes::Random::Secure>,
+which uses...
 L<Math::Random::Secure|http://search.cpan.org/perldoc?Math::Random::Secure>
 
 
 Each of these has its own list of non-core dependencies as well.  But it's a
 well-tested set of dependencies, with broad portability demonstrated by the
-smoke tests.
+smoke tests.  Most important, we're using not only a cryptographically strong
+random number generator, but also a strong source to seed the generator.
 
 =head1 CONFIGURATION AND ENVIRONMENT
 

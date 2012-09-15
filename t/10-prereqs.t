@@ -7,7 +7,7 @@ use Test::More;
 BEGIN {
     use_ok('Authen::Passphrase');
     use_ok('Authen::Passphrase::SaltedDigest');
-    use_ok('Math::Random::Secure');
+    use_ok('Bytes::Random::Secure');
 }
 
 done_testing();

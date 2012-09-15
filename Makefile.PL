@@ -9,20 +9,19 @@ WriteMakefile(
     VERSION_FROM       => 'lib/Authen/Passphrase/SaltedSHA512.pm',
     ABSTRACT_FROM      => 'lib/Authen/Passphrase/SaltedSHA512.pm',
     LICENSE            => 'perl',
-    MIN_PERL_VERSION   => '5.006000',
+    MIN_PERL_VERSION   => '5.008000',
     PL_FILES           => {},
     CONFIGURE_REQUIRES => { 'ExtUtils::MakeMaker' => '6.62', },
     BUILD_REQUIRES     => { 
                             'Test::More' => '0.98', 
-                            'Statistics-Test-RandomWalk' => '0',
                           },
     PREREQ_PM          => {
-        'Authen::Passphrase'   => 0,
-        'Math::Random::Secure' => 0,
+        'Authen::Passphrase'    => 0,
+        'Bytes::Random::Secure' => 0,
     },
     META_MERGE => {
         provides  => 'Authen::Passphrase::SaltedSHA512.pm',
-        version   => '0.04',
+        version   => '0.05',
         resources => {
             repository => {
                 web =>

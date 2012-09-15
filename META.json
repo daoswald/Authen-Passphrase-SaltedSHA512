@@ -33,12 +33,12 @@
       "runtime" : {
          "requires" : {
             "Authen::Passphrase" : "0",
-            "Math::Random::Secure" : "0",
-            "perl" : "5.006000"
+            "Bytes::Random::Secure" : "0",
+            "perl" : "5.008000"
          }
       }
    },
    "release_status" : "stable",
    "resources" : {},
-   "version" : "0.04"
+   "version" : "0.05"
 }
