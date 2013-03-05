@@ -17,11 +17,11 @@ WriteMakefile(
                           },
     PREREQ_PM          => {
         'Authen::Passphrase'    => 0,
-        'Bytes::Random::Secure' => 0,
+        'Bytes::Random::Secure' => '0.20',
     },
     META_MERGE => {
         provides  => 'Authen::Passphrase::SaltedSHA512.pm',
-        version   => '0.06',
+        version   => '0.07',
         resources => {
             repository => {
                 web =>

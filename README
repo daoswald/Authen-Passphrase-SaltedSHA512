@@ -1,6 +1,6 @@
 Authen::Passphrase::SaltedSHA512
 
-Generate and authenticate salted SHA2 SHA-512 hashes for password validation.
+Generate and authenticate salted SHA2-512 hashes for password validation.
 
 This module implements a simple interface with sensible defaults to facilitate
 generation of salted passphrase hashes, and to authenticate user login

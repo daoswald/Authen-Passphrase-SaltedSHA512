@@ -1,5 +1,9 @@
 Revision history for Perl module Authen::Passphrase::SaltedSHA512
 
+0.07 2013-03-05
+  - Update PDO to reflect shift from Math::Random::Secure to
+    Bytes::Random::Secure.
+
 0.06 2012-11-02
   - "Changes" is now CPAN::Changes::Spec compliant.
   - Added t/09-changes.t to verify compliance with the spec.
