@@ -1,10 +1,10 @@
 {
-   "abstract" : "Safe, Sane, and Simple passphrase generation",
+   "abstract" : "Safe, Sane, and Simple passphrase salting,",
    "author" : [
       "David Oswald <davido [@at] cpan [d.o.t] org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120630",
+   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -22,6 +22,7 @@
    "prereqs" : {
       "build" : {
          "requires" : {
+            "English" : "0",
             "Test::More" : "0.98"
          }
       },
@@ -33,12 +34,12 @@
       "runtime" : {
          "requires" : {
             "Authen::Passphrase" : "0",
-            "Bytes::Random::Secure" : "0",
+            "Bytes::Random::Secure" : "0.20",
             "perl" : "5.008000"
          }
       }
    },
    "release_status" : "stable",
    "resources" : {},
-   "version" : "0.06"
+   "version" : "0.07"
 }

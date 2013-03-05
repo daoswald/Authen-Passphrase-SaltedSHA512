@@ -13,7 +13,8 @@ WriteMakefile(
     PL_FILES           => {},
     CONFIGURE_REQUIRES => { 'ExtUtils::MakeMaker' => '6.62', },
     BUILD_REQUIRES     => { 
-                            'Test::More' => '0.98', 
+                            'Test::More' => '0.98',
+                            'English'    => 0,
                           },
     PREREQ_PM          => {
         'Authen::Passphrase'    => 0,

@@ -23,9 +23,7 @@ sub new {
     $args{algorithm} = 'SHA-512';
 
     # We're doing our own random salt generation.
-    if ( exists $args{salt_random} ) {
-        delete $args{salt_random};
-    }
+    delete $args{salt_random};
 
     # If there is no hash supplied, and a passphrase is supplied, this must be
     # a passphrase hash/salt generation object.
@@ -37,14 +35,10 @@ sub new {
         # Generate a 512 bit random salt using a secure random generator.
         # 64 bytes is 512 bits, or 128 hex characters.
         my $salt = random_bytes_hex(NUM_BYTES);
-        
-        for (qw( salt salt_hash )) {
 
-            # We're generating our own salt.  Don't accept others.
-            if ( exists $args{$_} ) {
-                delete $args{$_};
-            }
-        }
+        # We're generating our own salt.  Don't accept others.
+        delete $args{$_} for qw( salt salt_hash );
+
         $args{salt_hex} = $salt;
     }
 
