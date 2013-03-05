@@ -397,9 +397,9 @@ This module has the following non-core immediate dependencies:
 
 =over 4
 
-=item Authen::Passphrase (which provides Authen::Passphrase::SaltedDigest)
+=item * L<Authen::Passphrase|http://search.cpan.org/perldoc?Authen::Passphrase>
 
-=item L<Bytes::Random::Secure|http://search.cpan.org/perldoc?Bytes::Random::Secure>
+=item * L<Bytes::Random::Secure|http://search.cpan.org/perldoc?Bytes::Random::Secure>
 
 =back
 

@@ -1,5 +1,8 @@
 Revision history for Perl module Authen::Passphrase::SaltedSHA512
 
+0.08 ????-??-??
+  - Fix minor POD formatting issue.
+
 0.07 2013-03-05
   - Update PDO to reflect shift from Math::Random::Secure to
     Bytes::Random::Secure.
@@ -11,9 +14,7 @@ Revision history for Perl module Authen::Passphrase::SaltedSHA512
   - Added t/09-changes.t to verify compliance with the spec.
 
 0.05 2012-09-15
-  - Switched random number back-end to Bytes::Random::Secure (which
-    essentially uses the same dependencies anyway, but abstracts away the
-    details, and could switch easily to another generator in the future).
+  - Switched random number back-end to Bytes::Random::Secure
   - Explanation in the POD as to why dependencies are heavy.
 
 0.04 2012-09-06
